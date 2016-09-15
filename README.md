@@ -1,18 +1,18 @@
-# docker-cron
-A simple docker container that runs a cron invoking a shell script.
+# paxport whitelister
+A simple docker container that runs HAProxy and a cron invoking a shell script that updates HAProxy config
 
 ## how to install and use it
 Copy the repository and build from the Dockerimage:
 
 
-`$ sudo docker build --rm -t docker-cron . `
+`$ sudo docker build --rm -t paxport-whitelister . `
 
 
 Run the docker container in the background (docker returns the id of the container):
 
 
 ```
-$ sudo docker run -t -i -d docker-cron
+$ sudo docker run -t -i -d paxport-whitelister
 b149b5e7306dba492558c7024809f13cfbb616cccd0f4020db61bf715f4db836
 ```
 
