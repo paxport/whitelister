@@ -1,5 +1,8 @@
 FROM ubuntu:latest
 
+# By default this is where we will grab the latest haproxy config file from
+ENV HAPROXY_CONFIG_URL https://raw.githubusercontent.com/paxport/whitelister/master/haproxy.cfg
+
 # Install cron
 RUN apt-get update
 RUN apt-get install cron
@@ -19,8 +22,8 @@ RUN apt-get install links -y
 ADD crontab /etc/cron.d/simple-cron
 
 # Add shell script and grant execution rights
-ADD script.sh /script.sh
-RUN chmod +x /script.sh
+ADD haproxy-update.sh /haproxy-update.sh
+RUN chmod +x /haproxy-update.sh
 
 # Give execution rights on the cron job
 RUN chmod 0644 /etc/cron.d/simple-cron
