@@ -13,13 +13,13 @@ Run the docker container in the background (docker returns the id of the contain
 
 ```
 $ sudo docker run -t -i -d paxport-whitelister
-b149b5e7306dba492558c7024809f13cfbb616cccd0f4020db61bf715f4db836
+9bc2f85be3101e1edc7c130b2edea264a58e5e8519696840eda40bb26adada32
 ```
 
 To check if it is running properly, connect to the container using the id and view the logfile. (You may have to wait 2 minutes)
 
 ```
-$ sudo docker exec -i -t b149b5e7306dba492558c7024809f13cfbb616cccd0f4020db61bf715f4db836 /bin/bash
+$ sudo docker exec -i -t 8be534c05a2ea47b9267c397660a7e2c6feea8e456082019953392da3549c12c /bin/bash
 root@b149b5e7306d:/# cat /var/log/cron.log
 Thu May 26 13:11:01 UTC 2016: executed script
 Thu May 26 13:12:01 UTC 2016: executed script
