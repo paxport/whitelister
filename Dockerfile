@@ -21,6 +21,9 @@ RUN apt-get install links -y
 # Add crontab file in the cron directory
 ADD crontab /etc/cron.d/simple-cron
 
+# Replace HAPROXY_CONFIG_URL in crontab with our URL
+RUN sed -i "s|HAPROXY_CONFIG_URL|$HAPROXY_CONFIG_URL|g" /etc/cron.d/simple-cron
+
 # Add shell script and grant execution rights
 ADD haproxy-update.sh /haproxy-update.sh
 RUN chmod +x /haproxy-update.sh

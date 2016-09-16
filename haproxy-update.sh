@@ -12,8 +12,14 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
-echo "Downloading latest haproxy config from $HAPROXY_CONFIG_URL"
-curl -o /etc/haproxy/haproxy.cfg.latest $HAPROXY_CONFIG_URL
+if [ -z "$1" ]
+  then
+    echo "No argument supplied for haproxy configuration url"
+    exit 1
+fi
+
+echo "Downloading latest haproxy config from $1"
+curl -o /etc/haproxy/haproxy.cfg.latest $1
 if [ $? -ne 0 ]; then
     echo "Failed to download latest haproxy config"
     exit 1
