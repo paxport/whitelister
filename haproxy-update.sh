@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 echo "$(date): executing haproxy reload script"
-
-echo "checking haproxy current status"
 /etc/init.d/haproxy status
 if [ $? -ne 0 ]; then
     echo "haproxy is not running so starting it"
@@ -18,8 +16,7 @@ if [ -z "$1" ]
     exit 1
 fi
 
-echo "Downloading latest haproxy config from $1"
-curl -o /etc/haproxy/haproxy.cfg.latest $1
+curl -o -s /etc/haproxy/haproxy.cfg.latest $1
 if [ $? -ne 0 ]; then
     echo "Failed to download latest haproxy config"
     exit 1

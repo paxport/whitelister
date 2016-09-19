@@ -39,10 +39,10 @@ RUN touch /var/log/cron.log
 ADD haproxy.cfg /etc/haproxy/haproxy.cfg
 
 # Update rsyslog config to write haproxy log files
-#ADD rsyslog.conf /etc/rsyslog.conf
+ADD rsyslog.conf /etc/rsyslog.conf
 
 # Restart rsyslog with new config
-#RUN sudo service rsyslog restart
+RUN service rsyslog restart
 
 # Run Our Script
 CMD ./haproxy-update.sh $HAPROXY_CONFIG_URL >> /var/log/cron.log
