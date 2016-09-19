@@ -25,18 +25,30 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-cmp -silent /etc/haproxy/haproxy.cfg.latest /etc/haproxy/haproxy.cfg
-if [ $? -ne 0 ]; then
+cmp --silent /etc/haproxy/haproxy.cfg.latest /etc/haproxy/haproxy.cfg
+if [ $? -eq 0 ]; then
     echo "No changes detected in latest haproxy configuration"
     exit 0
 fi
 
-echo "haproxy configuration has changed so reloading..."
+echo "haproxy configuration has changed so overwriting and reloading..."
+rm /etc/haproxy/haproxy.cfg
+if [ $? -ne 0 ]; then
+    echo "failed to delete legacy haproxy.cfg"
+    exit 1
+fi
+
+mv /etc/haproxy/haproxy.cfg.latest /etc/haproxy/haproxy.cfg
+if [ $? -ne 0 ]; then
+    echo "failed to rename legacy /etc/haproxy/haproxy.cfg.latest to /etc/haproxy/haproxy.cfg"
+    exit 1
+fi
+
 /etc/init.d/haproxy reload
 if [ $? -ne 0 ]; then
-    echo "haproxy failed to reload"
+    echo "haproxy failed to reload :-("
 else
-    echo "haproxy configuration reload was successful"
+    echo "haproxy configuration reload was successful :-)"
 fi
 
 exit $?
