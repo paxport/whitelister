@@ -19,7 +19,7 @@ $ sudo docker run -t -i -d paxport-whitelister
 To check if it is running properly, connect to the container using the id and view the logfile. (You may have to wait 2 minutes)
 
 ```
-$ sudo docker exec -i -t 001a02370b8bd91824175d0ee5c7ed07344c7b279ec3d738a6f1f1e129e26422 /bin/bash
+$ sudo docker exec -i -t 095b058beb625d5fbebb9becf30b6c6d9f8d9222a95f0e0184ec2af995f54f78 /bin/bash
 root@b149b5e7306d:/# cat /var/log/cron.log
 Thu May 26 13:11:01 UTC 2016: executed script
 Thu May 26 13:12:01 UTC 2016: executed script
