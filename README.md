@@ -19,10 +19,22 @@ A simple docker container that runs HAProxy and a cron invoking a shell script t
 `$ docker build --rm -t paxport-whitelister . `
 
 ### Tag
-`$ docker tag user/paxport-whitelister gcr.io/paxportcloud/paxport-whitelister `
+`$ docker tag paxport-whitelister gcr.io/paxportcloud/paxport-whitelister `
 
 ### Push
 `$ gcloud docker push gcr.io/paxportcloud/paxport-whitelister `
+
+## Create Compute Instance
+
+### Create Template
+    gcloud alpha compute instance-templates create-from-container paxport-whitelister-template \
+        --docker-image=gcr.io/paxportcloud/paxport-whitelister:latest \
+        --port-mappings=8000:8000:TCP,8001:8001:TCP,8002:8002:TCP,8003:8003:TCP,8004:8004:TCP,8005:8005:TCP,8006:8006:TCP,8007:8007:TCP,8008:8008:TCP,8009:8009:TCP
+
+### Create Managed Instance
+    gcloud compute instance-groups managed create paxport-whitelister-group \
+      --instance-template=paxport-whitelister-template \
+      --size=1
 
 ## how to install and debug it locally
 Copy the repository and build from the Dockerimage:
