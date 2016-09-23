@@ -13,7 +13,7 @@ A simple docker container that runs HAProxy and a cron invoking a shell script t
 * Docker
 * Google Cloud SDK with gcloud configured to use your default project
 
-## Build container and deploy to registry
+# Build container and deploy to registry
 
 ### Build
 `$ docker build --rm -t paxport-whitelister . `
@@ -23,8 +23,9 @@ A simple docker container that runs HAProxy and a cron invoking a shell script t
 
 ### Push
 `$ gcloud docker push gcr.io/paxportcloud/paxport-whitelister `
+    
 
-## Create Compute Instance
+## Create Compute Instance (requires Alpha permissions)
 
 ### Create Template
     gcloud alpha compute instance-templates create-from-container paxport-whitelister-template \
