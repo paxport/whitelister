@@ -1,11 +1,11 @@
 # paxport whitelister
-A simple docker container that runs HAProxy and a cron invoking a shell script that updates HAProxy config
+A simple docker container that runs HAProxy and a shell script that updates HAProxy config periodically
 
 ## What's in the container?
 
 * Base Ubunto
 * HA Proxy which is kept up with systemd
-* cron runs a script every minute that pulls down the latest haproxy.cfg from known URL
+* docker runs a script which loops and every minute pulls down the latest haproxy.cfg from known URL
 * If the config from the URL is different from current haproxy config then a soft reload occurs
 
 ## Pre-requisites

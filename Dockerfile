@@ -19,6 +19,11 @@ RUN apt-get update && apt-get install vim -y
 # Install Links so we can check proxy is working
 RUN apt-get update && apt-get install links -y
 
+#
+# Note that cron does not seem to execute correctly under docker
+# containers running on google compute :(
+#
+
 # Add simple-cron file in the cron directory
 # ADD simple-cron /etc/cron.d/simple-cron
 
