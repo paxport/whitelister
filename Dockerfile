@@ -13,8 +13,10 @@ RUN apt-get install curl -y
 # Install HAProxy
 RUN apt-get install haproxy -y
 
-# Install rsyslog so we can view haproxy logs
+# Install and run rsyslog so we can view haproxy logs
 RUN apt-get install rsyslog -y
+
+RUN apt-get update && apt-get install vim -y
 
 # Install Links so we can check proxy is working
 RUN apt-get install links -y
@@ -38,14 +40,5 @@ RUN touch /var/log/cron.log
 # Overwrite haproxy config with ours
 ADD haproxy.cfg /etc/haproxy/haproxy.cfg
 
-# Update rsyslog config to write haproxy log files
-ADD rsyslog.conf /etc/rsyslog.conf
-
-# Restart rsyslog with new config
-RUN service rsyslog restart
-
-# Run Our Script
-CMD ./haproxy-update.sh $HAPROXY_CONFIG_URL >> /var/log/cron.log
-
 # Run cron
-CMD cron && tail -f /var/log/cron.log
+CMD cron -L15 && tail -f /var/log/cron.log

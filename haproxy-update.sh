@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 echo "$(date): executing haproxy reload script"
+
+/etc/init.d/rsyslog status
+if [ $? -ne 0 ]; then
+    echo "rsyslog is not running so starting it"
+    /etc/init.d/rsyslog start
+    if [ $? -ne 0 ]; then
+        echo "rsyslog failed to start!"
+    fi
+fi
+
 /etc/init.d/haproxy status
 if [ $? -ne 0 ]; then
     echo "haproxy is not running so starting it"
@@ -16,7 +26,7 @@ if [ -z "$1" ]
     exit 1
 fi
 
-curl -o -s /etc/haproxy/haproxy.cfg.latest $1
+curl -s -o /etc/haproxy/haproxy.cfg.latest $1
 if [ $? -ne 0 ]; then
     echo "Failed to download latest haproxy config"
     exit 1

@@ -13,7 +13,7 @@ A simple docker container that runs HAProxy and a cron invoking a shell script t
 * Docker
 * Google Cloud SDK with gcloud configured to use your default project
 
-# Build container and deploy to registry
+# Build container and deploy to google container registry
 
 ### Build
 `$ docker build --rm -t paxport-whitelister . `
@@ -23,51 +23,89 @@ A simple docker container that runs HAProxy and a cron invoking a shell script t
 
 ### Push
 `$ gcloud docker push gcr.io/paxportcloud/paxport-whitelister `
+
     
+## Create Compute Instance to run docker image
 
-## Create Compute Instance (requires Alpha permissions)
 
-### Create Template
-    gcloud alpha compute instance-templates create-from-container paxport-whitelister-template \
+### Create a new Instance (rename node-a if creating new one)
+
+    gcloud alpha compute instances create-from-container whitelister-node-a \
         --docker-image=gcr.io/paxportcloud/paxport-whitelister:latest \
-        --port-mappings=8000:8000:TCP,8001:8001:TCP,8002:8002:TCP,8003:8003:TCP,8004:8004:TCP,8005:8005:TCP,8006:8006:TCP,8007:8007:TCP,8008:8008:TCP,8009:8009:TCP
+        --port-mappings=8000:8000:TCP,8001:8001:TCP,8002:8002:TCP,8003:8003:TCP,8004:8004:TCP,8005:8005:TCP,8006:8006:TCP,8007:8007:TCP,8008:8008:TCP,8009:8009:TCP \
+        --zone us-central1-c \
+        --machine-type g1-small
 
-### Create Managed Instance
-    gcloud compute instance-groups managed create paxport-whitelister-group \
-      --instance-template=paxport-whitelister-template \
-      --size=1
+
+## Debug by SSHing into compute instance
+
+```
+$ gcloud compute ssh whitelister-node-a --zone=us-central1-c
+```
+
+then
+
+```
+$ sudu su
+```
+
+## Find docker container id
+
+```
+$ docker ps | grep pax
+```
+
+### Tail Update Log
+
+```
+$ docker exec -i -t <container id> tail -f /var/log/cron.log
+```
+
+### View container logs
+
+```
+$ docker logs -f <container id>
+```
+
+### Login to container
+
+```
+$ docker exec -i -t <container id> /bin/bash
+```    
 
 ## how to install and debug it locally
 Copy the repository and build from the Dockerimage:
 
-`$ sudo docker build --rm -t paxport-whitelister . `
+`$ docker build --rm -t paxport-whitelister . `
 
 Run the docker container in the background (docker returns the id of the container):
 
 ```
-$ sudo docker run -t -i -d paxport-whitelister
-9bc2f85be3101e1edc7c130b2edea264a58e5e8519696840eda40bb26adada32
+$ docker run -t -i -d paxport-whitelister
 ```
 
-To check if it is running properly, connect to the container using the id and view the logfile. (You may have to wait 2 minutes)
+To check if it is running properly:
 
 ```
-$ sudo docker exec -i -t 74872bfcd924530cad4242534babbf61d3809e2325301c07a48b415a08ea7206 /bin/bash
-root@b149b5e7306d:/# cat /var/log/cron.log
-Thu May 26 13:11:01 UTC 2016: executed script
-Thu May 26 13:12:01 UTC 2016: executed script
+$ docker ps
 ```
 
-The cron job is running. Now let's modify the interval and the actual job executed!
+Connect to the container using the id and view the logfile. (You may have to wait 2 minutes)
+
+    $ sudo docker exec -i -t 74872bfcd924530cad4242534babbf61d3809e2325301c07a48b415a08ea7206 /bin/bash 
+    root@b149b5e7306d:/# cat /var/log/cron.log
+    Thu May 26 13:11:01 UTC 2016: executed script
+    Thu May 26 13:12:01 UTC 2016: executed script
 
 
-## how to modify
-To change the interval the cron job is runned, just simply edit the *crontab* file. In default, the job is runned every minute.
+If you only have one container running you can always log in with:
 
+```
+$ docker exec -i -t $(docker ps -q) /bin/bash
+```    
 
-`* * * * * root /script.sh`
+You can stop and remove all containers with:
 
-To change the actual job performed just change the content of the *script.sh* file. In default, the script writes the date into a file located in */var/log/cron.log*.
-
-
-`echo "$(date): executed script" >> /var/log/cron.log 2>&1`
+```
+$ docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+```
