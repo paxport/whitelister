@@ -39,8 +39,7 @@ RUN chmod +x /loop-forever.sh
 ADD haproxy.cfg /etc/haproxy/haproxy.cfg
 RUN /etc/init.d/haproxy restart
 
-RUN touch /var/log/loop-forever.log
+RUN touch /var/log/haproxy-update.log
 
 # Loop Forever calling the update script with our update URL
-# Update script output should end up in /var/log/syslog
-CMD /loop-forever.sh 60 ./haproxy-update.sh $HAPROXY_CONFIG_URL >> /var/log/loop-forever.log 2>&1
+CMD /loop-forever.sh 60 ./haproxy-update.sh $HAPROXY_CONFIG_URL >> /var/log/haproxy-update.log 2>&1

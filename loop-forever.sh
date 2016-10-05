@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-echo "loop-forever Arguments: <sleepsecs> <script> <args>"
+echo "loop-forever.sh arguments follow: <sleepsecs> <script> <args>"
 echo "$1"
 echo "$2"
 echo "${@:3}"
+
+echo "will execute the following command every $1 seconds: $2 ${@:3}"
 
 while true
 do
