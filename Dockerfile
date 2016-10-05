@@ -25,8 +25,8 @@ RUN apt-get update && apt-get install links -y
 #
 
 # update rsyslog config to enable udp etc
-ADD rsyslog.conf /etc/rsyslog.conf
-RUN /etc/init.d/rsyslog restart
+# ADD rsyslog.conf /etc/rsyslog.conf
+# RUN /etc/init.d/rsyslog restart
 
 # Add shell script and grant execution rights
 ADD haproxy-update.sh /haproxy-update.sh
