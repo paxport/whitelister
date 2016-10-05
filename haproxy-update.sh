@@ -1,21 +1,41 @@
 #!/usr/bin/env bash
-#echo "$(date): executing haproxy reload script"
+#
+# HAProxy Configuration Update Script
+#
+# This script will:
+#
+# 1) check that rsyslog is running and start it if it is not
+# 2) check that haproxy is running and start it if it is not
+# 3) download the latest version of the haproxy config file from supplied URL $1
+# 4) compare the downloaded file with the current haproxy.cfg and
+#
+#   a) if they are the same then exit (no changes required)
+#
+#   or
+#
+#   b) if the new file is different then
+#
+#       i) overwrite the haproxy.cfg to be the new version
+#       ii) do a soft restart so that haproxy updates its config
+#
+#   all output should go to syslog and stderr
+#
 
-/etc/init.d/rsyslog status
+/etc/init.d/rsyslog status 2>&1 | logger &
 if [ $? -ne 0 ]; then
-    echo "rsyslog is not running so starting it"
+    logger -s "rsyslog is not running so starting it"
     /etc/init.d/rsyslog start
     if [ $? -ne 0 ]; then
-        echo "rsyslog failed to start!"
+        logger -s "rsyslog failed to start!"
     fi
 fi
 
-/etc/init.d/haproxy status
+/etc/init.d/haproxy status 2>&1 | logger &
 if [ $? -ne 0 ]; then
     logger -s "haproxy is not running so starting it"
     /etc/init.d/haproxy start
     if [ $? -ne 0 ]; then
-        echo "haproxy failed to start"
+        logger -s "haproxy failed to start!"
         exit 1
     fi
 fi

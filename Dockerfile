@@ -24,17 +24,9 @@ RUN apt-get update && apt-get install links -y
 # containers running on google compute :(
 #
 
-# Add simple-cron file in the cron directory
-# ADD simple-cron /etc/cron.d/simple-cron
-
-# Replace HAPROXY_CONFIG_URL in simple-cron with our URL
-# RUN sed -i "s|HAPROXY_CONFIG_URL|$HAPROXY_CONFIG_URL|g" /etc/cron.d/simple-cron
-
-# Give execution rights on the cron job
-# RUN chmod 0644 /etc/cron.d/simple-cron
-
-# Now install into crontab
-# RUN crontab /etc/cron.d/simple-cron
+# update rsyslog config to enable udp etc
+ADD rsyslog.conf /etc/rsyslog.conf
+RUN /etc/init.d/rsyslog restart
 
 # Add shell script and grant execution rights
 ADD haproxy-update.sh /haproxy-update.sh
@@ -43,14 +35,9 @@ RUN chmod +x /haproxy-update.sh
 ADD loop-forever.sh /loop-forever.sh
 RUN chmod +x /loop-forever.sh
 
-# Create the log file to be able to run tail
-# RUN touch /var/log/cron.log
-
 # Overwrite haproxy config with ours
 ADD haproxy.cfg /etc/haproxy/haproxy.cfg
-
-# Run cron
-# CMD cron -L15 && tail -f /var/log/cron.log
+RUN /etc/init.d/haproxy restart
 
 RUN touch /var/log/loop-forever.log
 

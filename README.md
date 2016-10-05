@@ -8,6 +8,13 @@ A simple docker container that runs HAProxy and a shell script that updates HAPr
 * docker runs a script which loops and every minute pulls down the latest haproxy.cfg from known URL
 * If the config from the URL is different from current haproxy config then a soft reload occurs
 
+## Why not use cron?
+
+Seeing as we want to check for updates every minute why do we not use cron? The reason is that a lot of time
+was spent trying to make a cron solution work but very weird things happen with cron when operating under a
+docker container on a Google Compute Engine node. Basically the cron process would run but would never fire
+our jobs even though it worked locally fine.
+
 ## Pre-requisites
 
 * Docker
@@ -28,7 +35,7 @@ A simple docker container that runs HAProxy and a shell script that updates HAPr
 ## Create Compute Instance to run docker image
 
 
-### Create a new Instance (rename node-a if creating new one)
+### Create Node A (update name for new instances)
 
     gcloud alpha compute instances create-from-container whitelister-node-a \
         --docker-image=gcr.io/paxportcloud/paxport-whitelister:latest \
