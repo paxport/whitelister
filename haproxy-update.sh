@@ -20,8 +20,10 @@
 #
 #
 
-/etc/init.d/rsyslog status 2>&1 | logger &
-if [ $? -ne 0 ]; then
+output=$(/etc/init.d/rsyslog status)
+if [[ $output != *"rsyslogd is running"* ]]
+then
+    echo $output
     echo "$(date) rsyslog is not running so starting it..."
     /etc/init.d/rsyslog start
     if [ $? -ne 0 ]; then
@@ -29,8 +31,10 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
-/etc/init.d/haproxy status 2>&1 | logger &
-if [ $? -ne 0 ]; then
+output=$(/etc/init.d/haproxy status)
+if [[ $output != *"haproxy is running"* ]]
+then
+    echo $output
     echo "$(date) haproxy is not running so starting it..."
     /etc/init.d/haproxy start
     if [ $? -ne 0 ]; then

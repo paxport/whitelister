@@ -4,7 +4,7 @@ A simple docker container that runs HAProxy and a shell script that updates HAPr
 ## What's in the container?
 
 * Base Ubunto
-* HA Proxy which is kept up with systemd
+* HA Proxy which is kept up
 * docker runs a script which loops and every minute pulls down the latest haproxy.cfg from known URL
 * If the config from the URL is different from current haproxy config then a soft reload occurs
 
@@ -22,13 +22,13 @@ our jobs even though it worked locally fine.
 
 # Build container and deploy to google container registry
 
-### Build
+### Build the docker container image
 `$ docker build --rm -t paxport-whitelister . `
 
-### Tag
+### Tag the container image with remote registry location
 `$ docker tag paxport-whitelister gcr.io/paxportcloud/paxport-whitelister `
 
-### Push
+### Push container image to the remote registry
 `$ gcloud docker push gcr.io/paxportcloud/paxport-whitelister `
 
     
@@ -42,6 +42,12 @@ our jobs even though it worked locally fine.
         --port-mappings=8000:8000:TCP,8001:8001:TCP,8002:8002:TCP,8003:8003:TCP,8004:8004:TCP,8005:8005:TCP,8006:8006:TCP,8007:8007:TCP,8008:8008:TCP,8009:8009:TCP \
         --zone us-central1-c \
         --machine-type g1-small
+        
+## Existing Nodes in GCE
+
+###whitelister-node-a --> http://10.128.0.12:800X
+
+###whitelister-node-b --> http://10.128.0.9:800X
 
 
 ## Debug by SSHing into compute instance
