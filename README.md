@@ -71,7 +71,7 @@ $ docker ps | grep pax
 ### Tail Update Log
 
 ```
-$ docker exec -i -t <container id> tail -f /var/log/cron.log
+$ docker exec -i -t <container id> tail -f /var/log/haproxy-update.log
 ```
 
 ### View container logs
@@ -106,7 +106,7 @@ $ docker ps
 Connect to the container using the id and view the logfile. (You may have to wait 2 minutes)
 
     $ sudo docker exec -i -t 74872bfcd924530cad4242534babbf61d3809e2325301c07a48b415a08ea7206 /bin/bash 
-    root@b149b5e7306d:/# cat /var/log/cron.log
+    root@b149b5e7306d:/# cat /var/log/haproxy-update.log
     Thu May 26 13:11:01 UTC 2016: executed script
     Thu May 26 13:12:01 UTC 2016: executed script
 
